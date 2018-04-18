@@ -7,8 +7,12 @@ public static class Consts{
     public const string E_ExitEvent = "E_ExitEvent";
     public const string E_EnterEvent = "E_EnterEvent";
     public const string E_StartUp = "E_StartUp";
+    public const string E_EndGame = "E_EndGame";
 
     public const string V_PlayerMove = "V_PlayerMove";
+    public const string V_PlayerAnim = "V_PlayerAnim";
+
+    public const string M_GameModel = "M_GameModel";
 }
 
 public enum InputDirection

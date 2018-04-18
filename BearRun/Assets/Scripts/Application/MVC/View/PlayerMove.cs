@@ -5,6 +5,14 @@ using UnityEngine;
 public class PlayerMove : View
 {
     #region 常量
+    const float m_jumpValue = 5;
+    const float m_grivaty = 9.8f;
+    const float m_moveSpeed = 13f; //左右移动
+
+    const float m_slideTime = 0.733f;
+    const float m_maxSpeed = 40f;
+    const float m_accDistance = 200f;
+    const float m_accDelta = 0.5f;
     #endregion
 
     #region 事件
@@ -12,7 +20,7 @@ public class PlayerMove : View
 
     #region 字段
     private CharacterController m_cc;
-    public float m_speed = 20f;
+    private float speed = 20f;
     InputDirection m_inputDir = InputDirection.NULL;
     bool activeInput = false;
     Vector3 m_mousePos;
@@ -21,9 +29,17 @@ public class PlayerMove : View
     int m_targetIndex = 1;
     float m_xDistance;
     float m_yDistance;
-    float m_jumpValue = 5;
-    float m_grivaty = 9.8f;
-    float m_moveSpeed = 13f;
+
+    float m_timeCount = 0.0f; //滑动动画播放时间计时器
+    float m_accDistanceCount = 0.0f;  //加速距离统计
+
+    bool m_isSlide = false;
+
+    GameModel m_gameModel;
+
+    float m_maskSpeed;
+    float m_accSpeed = 10;  //速度增加的速率
+    bool m_isHit = false;
     #endregion
 
     #region 属性
@@ -34,18 +50,53 @@ public class PlayerMove : View
             return Consts.V_PlayerMove;
         }
     }
+
+    public float Speed
+    {
+        get
+        {
+            return speed;
+        }
+
+        set
+        {
+            speed = value;
+        }
+    }
     #endregion
 
     #region 方法
+
+    #region 移动
+
     IEnumerator UpdateAction()
     {
         while (true)
         {
-            m_yDistance -= m_grivaty * Time.deltaTime;
-            m_cc.Move((transform.forward * m_speed + new Vector3(0, m_yDistance, 0)) * Time.deltaTime);
-            UpdatePosition();
-            MoveControl();
+            if (m_gameModel.IsPlay && !m_gameModel.IsPause)
+            {
+                m_yDistance -= m_grivaty * Time.deltaTime;
+                m_cc.Move((transform.forward * Speed + new Vector3(0, m_yDistance, 0)) * Time.deltaTime);
+                UpdatePosition();
+                MoveControl();
+                SpeedControl();
+                SetSlideState();
+            }
+           
             yield return 0;
+        }
+    }
+
+    void SetSlideState()
+    {
+        if (m_isSlide)
+        {
+            m_timeCount += Time.deltaTime;
+            if (m_slideTime <= m_timeCount)
+            {
+                m_timeCount = 0.0f;
+                m_isSlide = false;
+            }
         }
     }
 
@@ -116,6 +167,7 @@ public class PlayerMove : View
                     m_targetIndex++;
                     m_xDistance = 2;
                     SendMessage("PlayAnimation", m_inputDir);
+                    Game.Instance.m_sound.PlayEffect("Se_UI_Huadong");
                 }
                 break;
             case InputDirection.LEFT:
@@ -124,6 +176,7 @@ public class PlayerMove : View
                     m_targetIndex--;
                     m_xDistance = -2;
                     SendMessage("PlayAnimation", m_inputDir);
+                    Game.Instance.m_sound.PlayEffect("Se_UI_Huadong");
                 }
                 break;
             case InputDirection.UP:
@@ -132,10 +185,28 @@ public class PlayerMove : View
                     m_yDistance = m_jumpValue;
                 }
                 SendMessage("PlayAnimation", m_inputDir);
+                Game.Instance.m_sound.PlayEffect("Se_UI_Jump");
                 break;
             case InputDirection.DOWN:
-                SendMessage("PlayAnimation", m_inputDir);
+                if (m_isSlide == false)
+                {
+                    m_isSlide = true;
+                    SendMessage("PlayAnimation", m_inputDir);
+                    Game.Instance.m_sound.PlayEffect("Se_UI_Slide");
+                }                
                 break;
+        }
+    }
+
+    void SpeedControl()
+    {
+        m_accDistanceCount += Speed * Time.deltaTime;
+        if (m_accDistance <= m_accDistanceCount)
+        {
+            m_accDistanceCount = 0;
+            Speed += m_accDelta;
+            Speed = Speed > m_maxSpeed ? m_maxSpeed : Speed;
+            Debug.Log(m_accDistance);
         }
     }
 
@@ -163,14 +234,37 @@ public class PlayerMove : View
                         break;
                 }
             }
-        }
+        }        
     }
+    #endregion
+
+    public void HitObstacles()
+    {
+        if (m_isHit)
+            return;
+        m_maskSpeed = Speed;
+        Speed = 0;
+        m_isHit = true;
+        StartCoroutine(DescreaseSpeed());
+    }
+
+    IEnumerator DescreaseSpeed()
+    {
+        while (Speed < m_maskSpeed)
+        {
+            Speed += m_accSpeed * Time.deltaTime;
+            yield return 0;
+        }
+        m_isHit = true;
+    }
+
     #endregion
 
     #region Unity回调
     private void Awake()
     {
         m_cc = GetComponent<CharacterController>();
+        m_gameModel = GetModel<GameModel>();
     }
 
     private void Start()
@@ -178,6 +272,39 @@ public class PlayerMove : View
         StartCoroutine(UpdateAction());
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == Tags.smallFence)
+        {
+            other.gameObject.SendMessage("HitPlayer", transform.position);
+            HitObstacles();
+            Game.Instance.m_sound.PlayEffect("Se_UI_Hit");
+        }
+        else if (other.gameObject.tag == Tags.bigFence)
+        {
+            if (m_isSlide)
+                return;
+            other.gameObject.SendMessage("HitPlayer", transform.position);
+            HitObstacles();
+            Game.Instance.m_sound.PlayEffect("Se_UI_Hit");
+        }
+        else if (other.gameObject.tag == Tags.block)
+        {
+            Game.Instance.m_sound.PlayEffect("Se_UI_End");
+            other.gameObject.SendMessage("HitPlayer", transform.position);
+
+            //游戏结束
+            SendEvent(Consts.E_EndGame);
+        }
+        else if (other.gameObject.tag == Tags.smallBlock)
+        {
+            Game.Instance.m_sound.PlayEffect("Se_UI_End");
+            other.transform.parent.parent.SendMessage("HitPlayer", transform.position);
+
+            //游戏结束
+            SendEvent(Consts.E_EndGame);
+        }
+    }
 
     #endregion
 

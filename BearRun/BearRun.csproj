@@ -13,11 +13,13 @@
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Unity Subset v3.5</TargetFrameworkProfile>
-    <CompilerResponseFile></CompilerResponseFile>
+    <CompilerResponseFile>
+    </CompilerResponseFile>
     <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>Android:13</UnityBuildTarget>
     <UnityVersion>2017.3.1f1</UnityVersion>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <LangVersion>4</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -289,10 +291,15 @@
     <Compile Include="Assets\Scripts\Application\Consts.cs" />
     <Compile Include="Assets\Scripts\Application\Game.cs" />
     <Compile Include="Assets\Scripts\Application\Misc\FollowPlayer.cs" />
-    <Compile Include="Assets\Scripts\Application\Misc\PlayerAnim.cs" />
     <Compile Include="Assets\Scripts\Application\Misc\RoadChange.cs" />
+    <Compile Include="Assets\Scripts\Application\MVC\Controller\EndGameController.cs" />
+    <Compile Include="Assets\Scripts\Application\MVC\Controller\EnterScenesController.cs" />
     <Compile Include="Assets\Scripts\Application\MVC\Controller\StartUpController.cs" />
+    <Compile Include="Assets\Scripts\Application\MVC\Model\GameModel.cs" />
+    <Compile Include="Assets\Scripts\Application\MVC\View\PlayerAnim.cs" />
     <Compile Include="Assets\Scripts\Application\MVC\View\PlayerMove.cs" />
+    <Compile Include="Assets\Scripts\Application\Objects\Effects.cs" />
+    <Compile Include="Assets\Scripts\Application\Objects\Obstacles.cs" />
     <Compile Include="Assets\Scripts\Application\StaticData\StaticData.cs" />
     <Compile Include="Assets\Scripts\Application\Tags.cs" />
     <Compile Include="Assets\Scripts\Framework\MonoSingleton.cs" />

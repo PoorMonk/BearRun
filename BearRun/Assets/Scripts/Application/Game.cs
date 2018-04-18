@@ -19,12 +19,13 @@ public class Game : MonoSingleton<Game> {
 
         m_objectPool = ObjectPool.Instance;
         m_sound = Sound.Instance;
-        m_staticData = StaticData.Instance;
-
-        //游戏启动
+        m_staticData = StaticData.Instance;        
 
         //初始化 注册
         RegisterController(Consts.E_StartUp, typeof(StartUpController));
+
+        //游戏启动
+        SendEvent(Consts.E_StartUp);
 
         //跳转场景
         LoadLevel(4);
@@ -36,7 +37,8 @@ public class Game : MonoSingleton<Game> {
         SceneArgs s = new SceneArgs() {
             sceneIndex = SceneManager.GetActiveScene().buildIndex
         };
-    SendEvent(Consts.E_ExitEvent, s);
+
+        SendEvent(Consts.E_ExitEvent, s);
 
         //进入新场景
         SceneManager.LoadScene(level);
@@ -48,7 +50,7 @@ public class Game : MonoSingleton<Game> {
         SceneArgs s = new SceneArgs() {
             sceneIndex = level
         };
-    SendEvent(Consts.E_EnterEvent, s);
+        SendEvent(Consts.E_EnterEvent, s);
     }
 
     void SendEvent(string eventName, object data = null)

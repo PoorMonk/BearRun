@@ -6,4 +6,9 @@ public static class Tags {
 
     public const string road = "Road";
     public const string player = "Player";
+    public const string smallFence = "SmallFence";
+    public const string bigFence = "BigFence";
+
+    public const string block = "Block";
+    public const string smallBlock = "SmallBlock";
 }

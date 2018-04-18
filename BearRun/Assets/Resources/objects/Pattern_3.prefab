@@ -4492,6 +4492,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4814692107192336}
   - component: {fileID: 65951037550945098}
+  - component: {fileID: 65351385831420558}
   m_Layer: 0
   m_Name: Pattern_3
   m_TagString: Road
@@ -30435,6 +30436,18 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1256201365023568}
   m_Mesh: {fileID: 4300000, guid: 5599c8f398169f5419c4d849af943d63, type: 3}
+--- !u!65 &65351385831420558
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1567007592659490}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 10, y: 10, z: 160}
+  m_Center: {x: 0, y: -5, z: 76}
 --- !u!65 &65951037550945098
 BoxCollider:
   m_ObjectHideFlags: 1

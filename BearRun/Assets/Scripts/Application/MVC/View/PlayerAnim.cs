@@ -3,14 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class PlayerAnim : MonoBehaviour {
+public class PlayerAnim : View {
 
     Animation m_anim;
     Action PlayAnim;
+    GameModel m_gameModel;
+
+    public override string Name
+    {
+        get
+        {
+            return Consts.V_PlayerAnim;
+        }
+    }
 
     private void Awake()
     {
         m_anim = GetComponent<Animation>();
+        m_gameModel = GetModel<GameModel>();
         PlayAnim = PlayRun;
     }
 
@@ -18,7 +28,14 @@ public class PlayerAnim : MonoBehaviour {
     {
         if (PlayAnim != null)
         {
-            PlayAnim();
+            if (m_gameModel.IsPlay && !m_gameModel.IsPause)
+            {
+                PlayAnim();
+            }
+            else
+            {
+                m_anim.Stop();
+            }
         }
     }
 
@@ -84,5 +101,10 @@ public class PlayerAnim : MonoBehaviour {
             default:
                 break;
         }
+    }
+
+    public override void HandleEvent(string eventName, object data)
+    {
+        throw new NotImplementedException();
     }
 }
