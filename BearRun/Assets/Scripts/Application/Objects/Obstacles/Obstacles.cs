@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Obstacles : ReusableObject
 {
-    Transform m_parent;
+    protected Transform m_parent;
 
     public override void OnSpawn()
     {
@@ -16,12 +16,12 @@ public class Obstacles : ReusableObject
         
     }
 
-    private void Awake()
+    protected virtual void Awake()
     {
         m_parent = GameObject.Find("EffectParent").transform;
     }
 
-    public void HitPlayer(Vector3 pos)
+    protected virtual void HitPlayer(Vector3 pos)
     {
         //生成特效
         GameObject go = Game.Instance.m_objectPool.Spawn("FX_ZhuangJi", m_parent);

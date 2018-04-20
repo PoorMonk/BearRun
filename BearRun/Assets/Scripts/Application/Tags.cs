@@ -11,4 +11,7 @@ public static class Tags {
 
     public const string block = "Block";
     public const string smallBlock = "SmallBlock";
+    public const string beforeTrigger = "BeforeTrigger";
+
+    public const string magnetCollider = "MagnetCollider";
 }

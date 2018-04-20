@@ -40,6 +40,15 @@ public class PlayerMove : View
     float m_maskSpeed;
     float m_accSpeed = 10;  //速度增加的速率
     bool m_isHit = false;
+
+    private int m_coinDoubleTime = 1;
+    IEnumerator doubleCoinCoroutine;
+
+    IEnumerator magnetCoroutine;
+    SphereCollider m_sphereCollider;
+
+    IEnumerator invincibleCoroutine;
+    public bool m_isInvincible = false;
     #endregion
 
     #region 属性
@@ -75,6 +84,8 @@ public class PlayerMove : View
         {
             if (m_gameModel.IsPlay && !m_gameModel.IsPause)
             {
+                UpdateDis();
+
                 m_yDistance -= m_grivaty * Time.deltaTime;
                 m_cc.Move((transform.forward * Speed + new Vector3(0, m_yDistance, 0)) * Time.deltaTime);
                 UpdatePosition();
@@ -85,6 +96,12 @@ public class PlayerMove : View
            
             yield return 0;
         }
+    }
+
+    private void UpdateDis()
+    {
+        DistanceArgs e = new DistanceArgs() { distance = (int)transform.position.z };
+        SendEvent(Consts.E_UpdateDis, e);
     }
 
     void SetSlideState()
@@ -258,6 +275,69 @@ public class PlayerMove : View
         m_isHit = true;
     }
 
+    public void EatCoin()
+    {
+        //print("EatCoin...");
+        CoinArgs e = new CoinArgs() { coin = m_coinDoubleTime };
+        SendEvent(Consts.E_UpdateCoin, e);
+    }
+
+    //双倍金币
+    public void EatMultiply()
+    {
+        if (doubleCoinCoroutine != null)
+        {
+            StopCoroutine(doubleCoinCoroutine);
+        }
+        doubleCoinCoroutine = MultiplyCoroutine();
+        StartCoroutine(doubleCoinCoroutine);
+    }
+
+    IEnumerator MultiplyCoroutine()
+    {
+        m_coinDoubleTime = 2;
+        yield return new WaitForSeconds(m_gameModel.SkillTime);
+        m_coinDoubleTime = 1;
+    }
+
+    public void EatMagnet()
+    {
+        if (magnetCoroutine != null)
+        {
+            StopCoroutine(magnetCoroutine);
+        }
+        magnetCoroutine = MagnetCoroutine();
+        StartCoroutine(magnetCoroutine);
+    }
+
+    IEnumerator MagnetCoroutine()
+    {
+        m_sphereCollider.enabled = true;
+        yield return new WaitForSeconds(m_gameModel.SkillTime);
+        m_sphereCollider.enabled = false;
+    }
+
+    public void HitAddTime()
+    {
+        //sendEvent 加时间
+        print("add time");
+    }
+
+    public void HitInvincible()
+    {
+        if (invincibleCoroutine != null)
+            StopCoroutine(invincibleCoroutine);
+        invincibleCoroutine = InvincibleCoroutine();
+        StartCoroutine(invincibleCoroutine);
+    }
+
+    IEnumerator InvincibleCoroutine()
+    {
+        m_isInvincible = true;
+        yield return new WaitForSeconds(m_gameModel.SkillTime);
+        m_isInvincible = false;
+    }
+
     #endregion
 
     #region Unity回调
@@ -265,6 +345,8 @@ public class PlayerMove : View
     {
         m_cc = GetComponent<CharacterController>();
         m_gameModel = GetModel<GameModel>();
+        m_sphereCollider = GetComponentInChildren<SphereCollider>();
+        m_sphereCollider.enabled = false;
     }
 
     private void Start()
@@ -276,13 +358,15 @@ public class PlayerMove : View
     {
         if (other.gameObject.tag == Tags.smallFence)
         {
+            if (m_isInvincible)
+                return;
             other.gameObject.SendMessage("HitPlayer", transform.position);
             HitObstacles();
             Game.Instance.m_sound.PlayEffect("Se_UI_Hit");
         }
         else if (other.gameObject.tag == Tags.bigFence)
         {
-            if (m_isSlide)
+            if (m_isInvincible || m_isSlide)
                 return;
             other.gameObject.SendMessage("HitPlayer", transform.position);
             HitObstacles();
@@ -290,6 +374,8 @@ public class PlayerMove : View
         }
         else if (other.gameObject.tag == Tags.block)
         {
+            if (m_isInvincible)
+                return;
             Game.Instance.m_sound.PlayEffect("Se_UI_End");
             other.gameObject.SendMessage("HitPlayer", transform.position);
 
@@ -298,11 +384,17 @@ public class PlayerMove : View
         }
         else if (other.gameObject.tag == Tags.smallBlock)
         {
+            if (m_isInvincible)
+                return;
             Game.Instance.m_sound.PlayEffect("Se_UI_End");
             other.transform.parent.parent.SendMessage("HitPlayer", transform.position);
 
             //游戏结束
             SendEvent(Consts.E_EndGame);
+        }
+        else if (other.gameObject.tag == Tags.beforeTrigger)
+        {           
+            other.transform.parent.SendMessage("HitTrigger", SendMessageOptions.RequireReceiver);           
         }
     }
 

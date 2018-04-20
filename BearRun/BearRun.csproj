@@ -287,6 +287,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Application\Args\CoinArgs.cs" />
+    <Compile Include="Assets\Scripts\Application\Args\DistanceArgs.cs" />
     <Compile Include="Assets\Scripts\Application\Args\SceneArgs.cs" />
     <Compile Include="Assets\Scripts\Application\Consts.cs" />
     <Compile Include="Assets\Scripts\Application\Game.cs" />
@@ -299,7 +301,15 @@
     <Compile Include="Assets\Scripts\Application\MVC\View\PlayerAnim.cs" />
     <Compile Include="Assets\Scripts\Application\MVC\View\PlayerMove.cs" />
     <Compile Include="Assets\Scripts\Application\Objects\Effects.cs" />
-    <Compile Include="Assets\Scripts\Application\Objects\Obstacles.cs" />
+    <Compile Include="Assets\Scripts\Application\Objects\Item\AddTime.cs" />
+    <Compile Include="Assets\Scripts\Application\Objects\Item\Coin.cs" />
+    <Compile Include="Assets\Scripts\Application\Objects\Item\Invincible.cs" />
+    <Compile Include="Assets\Scripts\Application\Objects\Item\Item.cs" />
+    <Compile Include="Assets\Scripts\Application\Objects\Item\Magnet.cs" />
+    <Compile Include="Assets\Scripts\Application\Objects\Item\Multiply.cs" />
+    <Compile Include="Assets\Scripts\Application\Objects\Obstacles\Car.cs" />
+    <Compile Include="Assets\Scripts\Application\Objects\Obstacles\Obstacles.cs" />
+    <Compile Include="Assets\Scripts\Application\Objects\Obstacles\People.cs" />
     <Compile Include="Assets\Scripts\Application\StaticData\StaticData.cs" />
     <Compile Include="Assets\Scripts\Application\Tags.cs" />
     <Compile Include="Assets\Scripts\Framework\MonoSingleton.cs" />
@@ -312,6 +322,7 @@
     <Compile Include="Assets\Scripts\Framework\Pool\ReusableObject.cs" />
     <Compile Include="Assets\Scripts\Framework\Pool\SubPool.cs" />
     <Compile Include="Assets\Scripts\Framework\Sound\Sound.cs" />
+    <Compile Include="Assets\UIBoard.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Res\Shader\Curved.shader" />

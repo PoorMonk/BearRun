@@ -33,6 +33,8 @@ public class ObjectPool : MonoSingleton<ObjectPool> {
                 break;
             }
         }
+        if (pool == null)
+            print("pool is null" + go.name);
         pool.UnSpawn(go);
     }
 
@@ -50,6 +52,7 @@ public class ObjectPool : MonoSingleton<ObjectPool> {
         GameObject go = Resources.Load<GameObject>(path);
         SubPool pool = new SubPool(trans, go);
         m_pools.Add(pool.Name, pool);
+        Debug.Log("CreatePool" + pool.Name);
     }
 	
 }
