@@ -8,8 +8,8 @@ public class Magnet : Item
     {
         Game.Instance.m_sound.PlayEffect("Se_UI_Magnet");
 
-        //Game.Instance.m_objectPool.UnSpawn(gameObject);
-        Destroy(gameObject);
+        Game.Instance.m_objectPool.UnSpawn(gameObject);
+        //Destroy(gameObject);
     }
 
     public override void OnSpawn()
@@ -27,7 +27,8 @@ public class Magnet : Item
         if (other.tag == Tags.player)
         {
             HitPlayer(other.transform);
-            other.SendMessage("EatMagnet", SendMessageOptions.RequireReceiver);
+            //other.SendMessage("EatMagnet", SendMessageOptions.RequireReceiver);
+            other.SendMessage("HitItem", ItemKind.MAGNET);
         }
     }
 }

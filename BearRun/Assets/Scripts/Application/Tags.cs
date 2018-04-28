@@ -14,4 +14,11 @@ public static class Tags {
     public const string beforeTrigger = "BeforeTrigger";
 
     public const string magnetCollider = "MagnetCollider";
+
+    public const string beforeGoalTrigger = "BeforeGoalTrigger";
+
+    public const string ball = "Ball";
+
+    public const string goalKeeper = "Goalkeeper";
+    public const string ballDoor = "BallDoor";
 }

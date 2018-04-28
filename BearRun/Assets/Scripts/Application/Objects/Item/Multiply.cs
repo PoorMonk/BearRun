@@ -7,8 +7,8 @@ public class Multiply : Item {
     {
         Game.Instance.m_sound.PlayEffect("Se_UI_JinBi");
 
-        //Game.Instance.m_objectPool.UnSpawn(gameObject);
-        Destroy(gameObject);
+        Game.Instance.m_objectPool.UnSpawn(gameObject);
+        //Destroy(gameObject);
     }
 
     public override void OnSpawn()
@@ -26,7 +26,8 @@ public class Multiply : Item {
         if (other.tag == Tags.player)
         {
             HitPlayer(other.transform);
-            other.SendMessage("EatMultiply", SendMessageOptions.RequireReceiver);
+            //other.SendMessage("EatMultiply", SendMessageOptions.RequireReceiver);
+            other.SendMessage("HitItem", ItemKind.MULTIPLY);
         }
     }
 

@@ -42,13 +42,19 @@ public class PlayerMove : View
     bool m_isHit = false;
 
     private int m_coinDoubleTime = 1;
+
     IEnumerator doubleCoinCoroutine;
-
-    IEnumerator magnetCoroutine;
-    SphereCollider m_sphereCollider;
-
+    IEnumerator magnetCoroutine; 
     IEnumerator invincibleCoroutine;
+
+    SphereCollider m_sphereCollider;
     public bool m_isInvincible = false;
+
+    //和射门有关
+    GameObject m_ball;
+    GameObject m_trail;
+    IEnumerator goalCor;
+    bool m_isGoal = false;
     #endregion
 
     #region 属性
@@ -170,7 +176,7 @@ public class PlayerMove : View
             m_inputDir = InputDirection.RIGHT;
         }
 
-        print(m_inputDir);
+        //print(m_inputDir);
     }
 
     void UpdatePosition()
@@ -223,7 +229,7 @@ public class PlayerMove : View
             m_accDistanceCount = 0;
             Speed += m_accDelta;
             Speed = Speed > m_maxSpeed ? m_maxSpeed : Speed;
-            Debug.Log(m_accDistance);
+            //Debug.Log(m_accDistance);
         }
     }
 
@@ -272,7 +278,7 @@ public class PlayerMove : View
             Speed += m_accSpeed * Time.deltaTime;
             yield return 0;
         }
-        m_isHit = true;
+        m_isHit = false;
     }
 
     public void EatCoin()
@@ -296,7 +302,15 @@ public class PlayerMove : View
     IEnumerator MultiplyCoroutine()
     {
         m_coinDoubleTime = 2;
-        yield return new WaitForSeconds(m_gameModel.SkillTime);
+        float timer = m_gameModel.SkillTime;
+        while (timer > 0)
+        {
+            if (m_gameModel.IsPlay && !m_gameModel.IsPause)
+                timer -= Time.deltaTime;
+            //yield return new WaitForSeconds(m_gameModel.SkillTime);
+            yield return 0;
+        }
+        
         m_coinDoubleTime = 1;
     }
 
@@ -313,14 +327,22 @@ public class PlayerMove : View
     IEnumerator MagnetCoroutine()
     {
         m_sphereCollider.enabled = true;
-        yield return new WaitForSeconds(m_gameModel.SkillTime);
+        float timer = m_gameModel.SkillTime;
+        while (timer > 0)
+        {
+            if (m_gameModel.IsPlay && !m_gameModel.IsPause)
+                timer -= Time.deltaTime;
+            //yield return new WaitForSeconds(m_gameModel.SkillTime);
+            yield return 0;
+        }
         m_sphereCollider.enabled = false;
     }
 
     public void HitAddTime()
     {
         //sendEvent 加时间
-        print("add time");
+        //print("add time");
+        SendEvent(Consts.E_HitAddTime);
     }
 
     public void HitInvincible()
@@ -331,13 +353,78 @@ public class PlayerMove : View
         StartCoroutine(invincibleCoroutine);
     }
 
+    public void HitItem(ItemKind item)
+    {
+        ItemArgs e = new ItemArgs
+        {
+            hitCount = 0,
+            kind = item
+        };
+        SendEvent(Consts.E_HitItem, e);
+        //switch (item)
+        //{
+        //    case ItemKind.INVINCIBLE:
+                
+        //        break;
+        //    case ItemKind.MULTIPLY:
+                
+        //        break;
+        //    case ItemKind.MAGNET:
+                
+        //        break;
+        //}
+    }
+
     IEnumerator InvincibleCoroutine()
     {
         m_isInvincible = true;
-        yield return new WaitForSeconds(m_gameModel.SkillTime);
+        float timer = m_gameModel.SkillTime;
+        while (timer > 0)
+        {
+            if (m_gameModel.IsPlay && !m_gameModel.IsPause)
+                timer -= Time.deltaTime;
+            //yield return new WaitForSeconds(m_gameModel.SkillTime);
+            yield return 0;
+        }
         m_isInvincible = false;
     }
 
+    public void OnGoalClicked()
+    {
+        Debug.Log("OnGoalClicked");
+        if (goalCor != null)
+            StopCoroutine(goalCor);
+        SendMessage("MessagePlayShoot");
+        m_trail.SetActive(true);
+        m_ball.SetActive(false);
+        goalCor = MoveBall();
+        StartCoroutine(goalCor);       
+    }
+
+    IEnumerator MoveBall()
+    {
+        while (true)
+        {
+            if (m_gameModel.IsPlay && !m_gameModel.IsPause)
+                m_trail.transform.Translate(transform.forward * 50 * Time.deltaTime);
+            yield return 0;
+        }
+    }
+
+    //进球
+    public void HitBallDoor()
+    {
+        StopCoroutine(goalCor);
+        m_trail.transform.localPosition = new Vector3(0, 0.50f, 1.85f);
+        m_trail.SetActive(false);
+        m_ball.SetActive(true);
+        m_isGoal = true;
+
+        Game.Instance.m_objectPool.Spawn("FX_GOAL", m_trail.transform.parent);
+        Game.Instance.m_sound.PlayEffect("Se_UI_Goal");
+
+        SendEvent(Consts.E_ShootGoal);
+    }
     #endregion
 
     #region Unity回调
@@ -347,6 +434,10 @@ public class PlayerMove : View
         m_gameModel = GetModel<GameModel>();
         m_sphereCollider = GetComponentInChildren<SphereCollider>();
         m_sphereCollider.enabled = false;
+
+        m_ball = transform.Find("Ball").gameObject;
+        m_trail = GameObject.Find("trail").gameObject;
+        m_trail.gameObject.SetActive(false);
     }
 
     private void Start()
@@ -396,6 +487,32 @@ public class PlayerMove : View
         {           
             other.transform.parent.SendMessage("HitTrigger", SendMessageOptions.RequireReceiver);           
         }
+        else if (other.gameObject.tag == Tags.beforeGoalTrigger)
+        {
+            SendEvent(Consts.E_HitGoalTrigger);
+            Game.Instance.m_objectPool.Spawn("FX_JiaSu", m_trail.transform.parent);
+            other.transform.parent.parent.SendMessage("ReInit", SendMessageOptions.RequireReceiver);
+            //Debug.Log("GoalTrigger");
+        }
+        else if (other.gameObject.tag == Tags.goalKeeper)
+        {
+            HitObstacles();
+            other.transform.parent.parent.parent.SendMessage("HitGoalKeeper", SendMessageOptions.RequireReceiver);
+            //Debug.Log("HitObstacles");
+        }
+        else if (other.gameObject.tag == Tags.ballDoor)
+        {
+            if (m_isGoal)
+            {
+                m_isGoal = false;
+                return;
+            }
+            //Debug.Log("m_isGoal is true..");
+            HitObstacles();
+            Game.Instance.m_objectPool.Spawn("Effect_QiuWang", m_trail.transform.parent);
+            other.transform.parent.parent.SendMessage("HitDoor", m_nowIndex);
+            //Debug.Log("HitNet...");
+        }
     }
 
     #endregion
@@ -403,7 +520,19 @@ public class PlayerMove : View
     #region 事件回调
     public override void HandleEvent(string eventName, object data)
     {
+        switch (eventName)
+        {
+            case Consts.E_ClickGoalButton:
+                OnGoalClicked();
+                //Debug.Log("OnGoalClicked--------------");
+                break;
+        }
+    }
 
+    public override void RegisterAttentionEvent()
+    {
+        AttentionList.Add(Consts.E_ClickGoalButton);
+        //Debug.Log("RegisterAttentionEvent");
     }
     #endregion
 

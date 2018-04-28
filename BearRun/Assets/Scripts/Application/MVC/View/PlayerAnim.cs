@@ -80,6 +80,20 @@ public class PlayerAnim : View {
         }
     }
 
+    public void MessagePlayShoot()
+    {
+        PlayAnim = PlayShoot;
+    }
+
+    void PlayShoot()
+    {
+        m_anim.Play("Shoot01");
+        if (m_anim["Shoot01"].normalizedTime > 0.95f)
+        {
+            PlayAnim = PlayRun;
+        }
+    }
+
     public void PlayAnimation(InputDirection dir)
     {
         switch (dir)

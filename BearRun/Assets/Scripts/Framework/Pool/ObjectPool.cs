@@ -52,7 +52,12 @@ public class ObjectPool : MonoSingleton<ObjectPool> {
         GameObject go = Resources.Load<GameObject>(path);
         SubPool pool = new SubPool(trans, go);
         m_pools.Add(pool.Name, pool);
-        Debug.Log("CreatePool" + pool.Name);
+        //Debug.Log("CreatePool" + pool.Name);
     }
 	
+    public void Clear()
+    {
+        m_pools.Clear();
+    }
+
 }

@@ -8,6 +8,8 @@ public class Car : Obstacles
     public bool m_canMove = false;
     private float m_speed = 10f;
 
+    GameModel gm;
+
     public override void OnSpawn()
     {
         base.OnSpawn();
@@ -21,6 +23,7 @@ public class Car : Obstacles
 
     protected override void Awake()
     {
+        gm = MVC.GetModel<GameModel>();
         base.Awake();
     }
 
@@ -36,7 +39,7 @@ public class Car : Obstacles
 
     private void Update()
     {
-        if (m_isHit && m_canMove)
+        if (m_isHit && m_canMove && gm.IsPlay && !gm.IsPause)
         {
             transform.Translate(-transform.forward * m_speed * Time.deltaTime);
         }

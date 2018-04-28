@@ -28,10 +28,10 @@ public class Game : MonoSingleton<Game> {
         SendEvent(Consts.E_StartUp);
 
         //跳转场景
-        LoadLevel(4);
+        LoadLevel(2);
     }
 
-    void LoadLevel(int level)
+    public void LoadLevel(int level)
     {
         //退出当前场景
         SceneArgs s = new SceneArgs() {

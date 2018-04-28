@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4085190604571422}
   - component: {fileID: 65034779876668580}
   - component: {fileID: 54113164571516712}
+  - component: {fileID: 114014020213266964}
   m_Layer: 0
   m_Name: Block_Ai
   m_TagString: SmallFence
@@ -52,8 +53,8 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1685293348394380}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.23, y: 0, z: 30}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -1.93, y: 0, z: 40.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4353036938487952}
@@ -158,3 +159,14 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &114014020213266964
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1685293348394380}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f79d0258d126cef4984dd004c3f565f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

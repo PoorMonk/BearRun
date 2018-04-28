@@ -31,7 +31,7 @@ public class Obstacles : ReusableObject
         
 
         //回收
-        //Game.Instance.m_objectPool.UnSpawn(gameObject);
-        Destroy(gameObject);
+        Game.Instance.m_objectPool.UnSpawn(gameObject);
+        //Destroy(gameObject);
     }
 }

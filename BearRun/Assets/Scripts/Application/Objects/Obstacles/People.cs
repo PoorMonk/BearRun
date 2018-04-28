@@ -9,6 +9,7 @@ public class People : Obstacles
     private float m_speed = 10f;
 
     private Animation m_anim;
+    GameModel gm;
 
     public override void OnSpawn()
     {
@@ -28,6 +29,7 @@ public class People : Obstacles
     {
         base.Awake();
         m_anim = GetComponentInChildren<Animation>();
+        gm = MVC.GetModel<GameModel>();
         
     }
 
@@ -47,7 +49,7 @@ public class People : Obstacles
 
     private void Update()
     {
-        if (m_isHit)
+        if (m_isHit && gm.IsPlay && !gm.IsPause)
         {
             transform.position -= new Vector3(m_speed, 0, 0) * Time.deltaTime;
         }

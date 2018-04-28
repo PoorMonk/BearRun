@@ -11,5 +11,7 @@ public class EndGameController : Controller
         gm.IsPlay = false;
 
         //todo:显示ENDUI
+        UIDead uiDead = GetView<UIDead>();
+        uiDead.Show();
     }
 }

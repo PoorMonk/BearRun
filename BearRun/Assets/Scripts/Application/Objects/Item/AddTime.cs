@@ -8,8 +8,8 @@ public class AddTime : Item
     {
         Game.Instance.m_sound.PlayEffect("Se_UI_Time");
 
-        //Game.Instance.m_objectPool.UnSpawn(gameObject);
-        Destroy(gameObject);
+        Game.Instance.m_objectPool.UnSpawn(gameObject);
+        //Destroy(gameObject);
     }
         
 
