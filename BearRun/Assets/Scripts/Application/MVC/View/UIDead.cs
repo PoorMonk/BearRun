@@ -48,6 +48,7 @@ public class UIDead : View
     public void OnCancleClicked()
     {
         SendEvent(Consts.E_FinalShowUI);
+        Game.Instance.m_sound.PlayEffect("Se_UI_Button");
     }
 
     public void OnBriberyClicked()
@@ -57,5 +58,6 @@ public class UIDead : View
             coin = BriberyTime * 500
         };
         SendEvent(Consts.E_BriberyClick, e);
+        Game.Instance.m_sound.PlayEffect("Se_UI_Button");
     }
 }

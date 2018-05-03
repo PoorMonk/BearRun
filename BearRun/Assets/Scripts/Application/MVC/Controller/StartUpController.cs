@@ -18,6 +18,8 @@ public class StartUpController : Controller
         RegisterController(Consts.E_BuyTools, typeof(BuyToolsController));
         RegisterController(Consts.E_BuyFootball, typeof(BuyFootballController));
         RegisterController(Consts.E_EquipFootball, typeof(EquipFootballController));
+        RegisterController(Consts.E_BuySkinCloth, typeof(BuySkinClothController));
+        RegisterController(Consts.E_EquipSkin, typeof(EquipSkinController));
 
         RegisterModel(new GameModel());
         GameModel gm = GetModel<GameModel>();

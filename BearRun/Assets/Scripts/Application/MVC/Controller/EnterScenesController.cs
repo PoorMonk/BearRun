@@ -13,14 +13,18 @@ public class EnterScenesController : Controller
         {
             case 1:
                 RegisterView(GameObject.Find("Canvas").transform.Find("UIMainMenu").GetComponent<UIMainMenu>());
+                Game.Instance.m_sound.PlayBG("Bgm_JieMian");
                 break;
             case 2:
                 RegisterView(GameObject.Find("Canvas").transform.Find("UIShop").GetComponent<UIShop>());
+                Game.Instance.m_sound.PlayBG("Bgm_JieMian");
                 break;
             case 3:
                 RegisterView(GameObject.Find("Canvas").transform.Find("UIBuyTools").GetComponent<UIBuyTools>());
+                Game.Instance.m_sound.PlayBG("Bgm_JieMian"); 
                 break;
             case 4:
+                Game.Instance.m_sound.PlayBG("Bgm_ZhanDou");
                 RegisterView(GameObject.FindWithTag(Tags.player).GetComponent<PlayerMove>());
                 RegisterView(GameObject.FindWithTag(Tags.player).GetComponent<PlayerAnim>());
                 RegisterView(GameObject.Find("Canvas").transform.Find("UIBoard").GetComponent<UIBoard>());

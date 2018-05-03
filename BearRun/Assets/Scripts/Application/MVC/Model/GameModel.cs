@@ -5,7 +5,7 @@ using UnityEngine;
 public class GameModel : Model
 {
     #region 常量
-    const int InitCoin = 1000;
+    const int InitCoin = 5000;
     #endregion
 
     #region 事件
@@ -25,6 +25,11 @@ public class GameModel : Model
     int m_coin;
     private int takeOnFootball = 0;
     public List<int> BuyFootBall = new List<int>();
+
+    SkinIndex takeOnSkin = new SkinIndex { SkinID = 0, ClothID = 0 };
+    public List<SkinIndex> BuySkinCloth = new List<SkinIndex>();
+
+    public int lastIndex = 1;
     #endregion
 
     #region 属性
@@ -171,14 +176,27 @@ public class GameModel : Model
             takeOnFootball = value;
         }
     }
+
+    public SkinIndex TakeOnSkin
+    {
+        get
+        {
+            return takeOnSkin;
+        }
+
+        set
+        {
+            takeOnSkin = value;
+        }
+    }
     #endregion
 
     #region 方法
     public void Init()
     {
-        m_invincible = 1;
-        m_magnet = 2;
-        m_multiply = 3;
+        m_invincible = 0;
+        m_magnet = 0;
+        m_multiply = 0;
         m_skillTime = 5;
         m_grade = 1;
         m_exp = 0;
@@ -189,6 +207,7 @@ public class GameModel : Model
     void InitSkin()
     {
         BuyFootBall.Add(TakeOnFootball);
+        BuySkinCloth.Add(TakeOnSkin);
     }
 
     //买东西
@@ -202,7 +221,7 @@ public class GameModel : Model
         return false;
     }
 
-    public ItemState GetSkinState(int i)
+    public ItemState GetFootballState(int i)
     {
         if (i == TakeOnFootball)
         {
@@ -214,6 +233,44 @@ public class GameModel : Model
         }
         else
         {
+            return ItemState.UNBUY;
+        }
+    }
+
+    public ItemState GetSkinState(int i)
+    {
+        if (takeOnSkin.SkinID == i)
+        {
+            return ItemState.EQUIP;
+        }
+        else
+        {
+            foreach (var item in BuySkinCloth)
+            {
+                if (item.SkinID == i)
+                {
+                    return ItemState.BUY;
+                }
+            }
+            return ItemState.UNBUY;
+        }
+    }
+
+    public ItemState GetClothState(SkinIndex index)
+    {
+        if (takeOnSkin.SkinID == index.SkinID && TakeOnSkin.ClothID == index.ClothID)
+        {
+            return ItemState.EQUIP;
+        }
+        else
+        {
+            foreach (var item in BuySkinCloth)
+            {
+                if (item.SkinID == index.SkinID && item.ClothID == index.ClothID)
+                {
+                    return ItemState.BUY;
+                }
+            }
             return ItemState.UNBUY;
         }
     }
@@ -230,4 +287,10 @@ public class GameModel : Model
 
 
 
+}
+
+public class SkinIndex
+{
+    public int SkinID;
+    public int ClothID;
 }

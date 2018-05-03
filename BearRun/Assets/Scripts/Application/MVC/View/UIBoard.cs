@@ -124,7 +124,7 @@ public class UIBoard : View
         {
             coin = Coin,
             distance = Distance,
-            score = Coin * 3 + Distance + GoalCount * 30
+            score = Coin + Distance * (GoalCount + 1)
         };
         SendEvent(Consts.E_PauseGame, e);
     }
@@ -240,6 +240,7 @@ public class UIBoard : View
             kind = ItemKind.MAGNET
         };
         SendEvent(Consts.E_HitItem, e);
+        Game.Instance.m_sound.PlayEffect("Se_UI_Button");
     }
 
     public void OnInvicinbleClicked()
@@ -250,6 +251,7 @@ public class UIBoard : View
             kind = ItemKind.INVINCIBLE
         };
         SendEvent(Consts.E_HitItem, e);
+        Game.Instance.m_sound.PlayEffect("Se_UI_Button");
     }
 
     public void OnMultiplyClicked()
@@ -260,13 +262,14 @@ public class UIBoard : View
             kind = ItemKind.MULTIPLY
         };
         SendEvent(Consts.E_HitItem, e);
+        Game.Instance.m_sound.PlayEffect("Se_UI_Button");
     }
 
     private void ShowGoalClick()
     {
         //slide可以显示
         StartCoroutine(StartCountDown());
-        
+        Game.Instance.m_sound.PlayEffect("Se_UI_Button");
         //btn可以按下
     }
 
@@ -289,6 +292,7 @@ public class UIBoard : View
     {
         SendEvent(Consts.E_ClickGoalButton);
         sliGoal.value = 0;
+        Game.Instance.m_sound.PlayEffect("Se_UI_Button");
         //Debug.Log("OnGoalBtnClicked---");
     }
 
@@ -301,6 +305,9 @@ public class UIBoard : View
     {
         gameObject.SetActive(false);
     }
+
+    
+
     #endregion
 
     #region Unity回调

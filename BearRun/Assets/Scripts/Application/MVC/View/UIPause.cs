@@ -9,6 +9,10 @@ public class UIPause : View
     public Text textScore;
     public Text textCoin;
 
+    GameModel m_gameModel;    
+    public SkinnedMeshRenderer skm;
+    public MeshRenderer mrBall;
+
     public override string Name
     {
         get
@@ -36,5 +40,19 @@ public class UIPause : View
     {
         Hide();
         SendEvent(Consts.E_ResumeGame);
+        Game.Instance.m_sound.PlayEffect("Se_UI_Button");
+    }
+
+    public void OnHomeClicked()
+    {
+        Game.Instance.m_sound.PlayEffect("Se_UI_Button");
+        Game.Instance.LoadLevel(1);
+    }
+
+    private void Awake()
+    {
+        m_gameModel = GetModel<GameModel>();
+        skm.material = Game.Instance.m_staticData.GetPlayerInfo(m_gameModel.TakeOnSkin.SkinID, m_gameModel.TakeOnSkin.ClothID).material;
+        mrBall.material = Game.Instance.m_staticData.GetFootballInfo(m_gameModel.TakeOnFootball).material;
     }
 }

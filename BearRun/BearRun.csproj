@@ -288,6 +288,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\Application\Args\BuyFootballArgs.cs" />
+    <Compile Include="Assets\Scripts\Application\Args\BuySkinClothArgs.cs" />
     <Compile Include="Assets\Scripts\Application\Args\BuyToolsArgs.cs" />
     <Compile Include="Assets\Scripts\Application\Args\CoinArgs.cs" />
     <Compile Include="Assets\Scripts\Application\Args\DistanceArgs.cs" />
@@ -302,11 +303,13 @@
     <Compile Include="Assets\Scripts\Application\Misc\RoadChange.cs" />
     <Compile Include="Assets\Scripts\Application\MVC\Controller\BriberyClickController.cs" />
     <Compile Include="Assets\Scripts\Application\MVC\Controller\BuyFootballController.cs" />
+    <Compile Include="Assets\Scripts\Application\MVC\Controller\BuySkinClothController.cs" />
     <Compile Include="Assets\Scripts\Application\MVC\Controller\BuyToolsController.cs" />
     <Compile Include="Assets\Scripts\Application\MVC\Controller\ContinueGameController.cs" />
     <Compile Include="Assets\Scripts\Application\MVC\Controller\EndGameController.cs" />
     <Compile Include="Assets\Scripts\Application\MVC\Controller\EnterScenesController.cs" />
     <Compile Include="Assets\Scripts\Application\MVC\Controller\EquipFootballController.cs" />
+    <Compile Include="Assets\Scripts\Application\MVC\Controller\EquipSkinController.cs" />
     <Compile Include="Assets\Scripts\Application\MVC\Controller\ExitSceneController.cs" />
     <Compile Include="Assets\Scripts\Application\MVC\Controller\FinalShowUIController.cs" />
     <Compile Include="Assets\Scripts\Application\MVC\Controller\HitItemController.cs" />
@@ -320,8 +323,10 @@
     <Compile Include="Assets\Scripts\Application\MVC\View\UIBuyTools.cs" />
     <Compile Include="Assets\Scripts\Application\MVC\View\UIDead.cs" />
     <Compile Include="Assets\Scripts\Application\MVC\View\UIFinalScore.cs" />
+    <Compile Include="Assets\Scripts\Application\MVC\View\UIMainMenu.cs" />
     <Compile Include="Assets\Scripts\Application\MVC\View\UIPause.cs" />
     <Compile Include="Assets\Scripts\Application\MVC\View\UIResume.cs" />
+    <Compile Include="Assets\Scripts\Application\MVC\View\UIShop.cs" />
     <Compile Include="Assets\Scripts\Application\Objects\Effect\BallNet.cs" />
     <Compile Include="Assets\Scripts\Application\Objects\Effect\Effects.cs" />
     <Compile Include="Assets\Scripts\Application\Objects\Effect\GoalEffect.cs" />
@@ -350,8 +355,6 @@
     <Compile Include="Assets\Scripts\Framework\Pool\ReusableObject.cs" />
     <Compile Include="Assets\Scripts\Framework\Pool\SubPool.cs" />
     <Compile Include="Assets\Scripts\Framework\Sound\Sound.cs" />
-    <Compile Include="Assets\UIMainMenu.cs" />
-    <Compile Include="Assets\UIShop.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Res\Shader\Curved.shader" />

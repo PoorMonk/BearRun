@@ -18,7 +18,10 @@ public class ExitSceneController : Controller
                 break;
             case 4:
                 Game.Instance.m_objectPool.Clear();
+
                 break;
         }
+        GameModel gm = GetModel<GameModel>();
+        gm.lastIndex = e.sceneIndex;
     }
 }

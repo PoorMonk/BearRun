@@ -11,6 +11,9 @@ public class UIBuyTools : View
     public Text m_textInvincible;
     public Text m_textCoin;
 
+    public SkinnedMeshRenderer skm;
+    public MeshRenderer mrBall;
+
     public override string Name
     {
         get
@@ -22,6 +25,8 @@ public class UIBuyTools : View
     private void Awake()
     {
         gm = GetModel<GameModel>();
+        skm.material = Game.Instance.m_staticData.GetPlayerInfo(gm.TakeOnSkin.SkinID, gm.TakeOnSkin.ClothID).material;
+        mrBall.material = Game.Instance.m_staticData.GetFootballInfo(gm.TakeOnFootball).material;
         Init();
     }
 
@@ -58,6 +63,7 @@ public class UIBuyTools : View
             coin = 100
         };
         SendEvent(Consts.E_BuyTools, e);
+        Game.Instance.m_sound.PlayEffect("Se_UI_Button");
     }
 
     public void OnbtnMultiplyClicked()
@@ -68,6 +74,7 @@ public class UIBuyTools : View
             coin = 200
         };
         SendEvent(Consts.E_BuyTools, e);
+        Game.Instance.m_sound.PlayEffect("Se_UI_Button");
     }
 
     public void OnbtnInvincibleClicked()
@@ -78,6 +85,7 @@ public class UIBuyTools : View
             coin = 200
         };
         SendEvent(Consts.E_BuyTools, e);
+        Game.Instance.m_sound.PlayEffect("Se_UI_Button");
     }
 
     public void OnbtnRandomToolClicked()
@@ -88,10 +96,20 @@ public class UIBuyTools : View
             coin = 300
         };
         SendEvent(Consts.E_BuyTools, e);
+        Game.Instance.m_sound.PlayEffect("Se_UI_Button");
     }
 
     public void OnbtnStartGameClicked()
     {
         Game.Instance.LoadLevel(4);
+        Game.Instance.m_sound.PlayEffect("Se_UI_Button");
+    }
+
+    public void OnbtnReturnClicked()
+    {
+        if (gm.lastIndex == 4)
+            gm.lastIndex = 1;
+        Game.Instance.LoadLevel(gm.lastIndex);
+        Game.Instance.m_sound.PlayEffect("Se_UI_Button");
     }
 }

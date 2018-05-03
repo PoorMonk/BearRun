@@ -26,6 +26,9 @@ public static class Consts{
     public const string E_BuyTools = "E_BuyTools";
     public const string E_BuyFootball = "E_BuyFootball";
     public const string E_EquipFootball = "E_EquipFootball";
+    public const string E_BuySkinCloth = "E_BuySkinCloth";
+    public const string E_EquipSkin = "E_EquipSkin";
+    //public const string 
 
     public const string V_PlayerMove = "V_PlayerMove";
     public const string V_PlayerAnim = "V_PlayerAnim";
@@ -63,4 +66,12 @@ public enum ItemState
     BUY,
     UNBUY,
     EQUIP
+}
+
+public enum ItemBuy
+{
+    SKIN,
+    CLOTH,
+    BALL,
+    SHOES
 }

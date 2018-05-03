@@ -37,6 +37,9 @@ public class PlayerMove : View
 
     GameModel m_gameModel;
 
+    public SkinnedMeshRenderer skm;
+    public MeshRenderer mrBall;
+
     float m_maskSpeed;
     float m_accSpeed = 10;  //速度增加的速率
     bool m_isHit = false;
@@ -438,6 +441,9 @@ public class PlayerMove : View
         m_ball = transform.Find("Ball").gameObject;
         m_trail = GameObject.Find("trail").gameObject;
         m_trail.gameObject.SetActive(false);
+
+        skm.material = Game.Instance.m_staticData.GetPlayerInfo(m_gameModel.TakeOnSkin.SkinID, m_gameModel.TakeOnSkin.ClothID).material;
+        mrBall.material = Game.Instance.m_staticData.GetFootballInfo(m_gameModel.TakeOnFootball).material;
     }
 
     private void Start()

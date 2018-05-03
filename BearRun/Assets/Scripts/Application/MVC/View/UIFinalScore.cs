@@ -51,5 +51,18 @@ public class UIFinalScore : View
     public void OnbtnReplayClicked()
     {
         Game.Instance.LoadLevel(4);
+        Game.Instance.m_sound.PlayEffect("Se_UI_Button");
+    }
+
+    public void OnbtnShopClicked()
+    {
+        Game.Instance.LoadLevel(2);
+        Game.Instance.m_sound.PlayEffect("Se_UI_Button");
+    }
+
+    public void OnbtnMainClicked()
+    {
+        Game.Instance.LoadLevel(1);
+        Game.Instance.m_sound.PlayEffect("Se_UI_Button");
     }
 }

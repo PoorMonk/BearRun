@@ -15,6 +15,7 @@ public class BuyFootballController : Controller
             gm.BuyFootBall.Add(e.index);
             shop.UpdateFootballBuyBtn(e.index);
             shop.UpdataFootballGizmo();
+            shop.UpdateUI();
         }
         
     }

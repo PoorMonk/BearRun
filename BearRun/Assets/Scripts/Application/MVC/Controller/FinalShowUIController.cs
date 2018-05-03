@@ -17,6 +17,6 @@ public class FinalShowUIController : Controller
         final.UpdateUI(board.Distance, board.Coin, board.GoalCount, gm.Exp, gm.Grade);
         UIDead dead = GetView<UIDead>();
         dead.Hide();
-        
+        gm.Coin += board.Coin;
     }
 }

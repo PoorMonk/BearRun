@@ -28,7 +28,7 @@ public class Game : MonoSingleton<Game> {
         SendEvent(Consts.E_StartUp);
 
         //跳转场景
-        LoadLevel(2);
+        LoadLevel(1);
     }
 
     public void LoadLevel(int level)
